@@ -1,38 +1,262 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails de l'Éditeur{% endblock %}
+{% block title %}Publisher Details: {{ editeur.nomEditeur }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .publisher-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .publisher-card {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            margin-bottom: 2rem;
+        }
+        
+        .publisher-header {
+            background-color: #f8f9fc;
+            padding: 1.25rem;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .publisher-body {
+            padding: 1.25rem;
+        }
+        
+        .publisher-footer {
+            background-color: #f8f9fc;
+            padding: 1rem 1.25rem;
+            border-top: 1px solid #e3e6f0;
+        }
+        
+        .publisher-title {
+            color: #4e73df;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .publisher-id {
+            font-family: monospace;
+            background-color: #eaecf4;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            color: #5a5c69;
+            font-size: 0.875rem;
+        }
+        
+        .info-table {
+            width: 100%;
+        }
+        
+        .info-table th {
+            width: 200px;
+            padding: 1rem;
+            background-color: #f8f9fc;
+            color: #5a5c69;
+            font-weight: 600;
+            vertical-align: top;
+        }
+        
+        .info-table td {
+            padding: 1rem;
+            color: #6e707e;
+            vertical-align: top;
+        }
+        
+        .info-table tr:not(:last-child) {
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .info-icon {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+            color: #4e73df;
+        }
+        
+        .country-flag {
+            width: 24px;
+            height: 18px;
+            margin-right: 0.5rem;
+            object-fit: cover;
+            border-radius: 2px;
+            vertical-align: middle;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-with-icon {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .danger-zone {
+            background-color: #fff8f8;
+            border: 1px solid #f5c6cb;
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+        }
+        
+        .danger-zone-title {
+            color: #721c24;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .danger-zone-title i {
+            margin-right: 0.5rem;
+        }
+        
+        .danger-zone-content {
+            color: #721c24;
+            margin-bottom: 1rem;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-    <h1>Détails de l'Éditeur</h1>
-
-    <table class="table table-bordered">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ editeur.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom de l'éditeur</th>
-                <td>{{ editeur.nomEditeur }}</td>
-            </tr>
-            <tr>
-                <th>Pays</th>
-                <td>{{ editeur.pays }}</td>
-            </tr>
-            <tr>
-                <th>Adresse</th>
-                <td>{{ editeur.adresse }}</td>
-            </tr>
-            <tr>
-                <th>Téléphone</th>
-                <td>{{ editeur.telephone }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="mt-3 mb-3">
-        <a href="{{ path('app_editeur_index') }}" class="btn btn-secondary">Retour à la liste</a>
-        <a href="{{ path('app_editeur_edit', {'id': editeur.id}) }}" class="btn btn-primary">Modifier</a>
+    <div class="page-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-2">
+                            <li class="breadcrumb-item">
+                                <a href="{{ path('app_editeur_index') }}" class="text-decoration-none">
+                                    <i class="fas fa-building"></i> Publishers
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ editeur.nomEditeur }}</li>
+                        </ol>
+                    </nav>
+                    <h1 class="h2 mb-0">
+                        <i class="fas fa-building me-2 text-primary"></i>
+                        Publisher Details
+                    </h1>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <a href="{{ path('app_editeur_index') }}" class="btn btn-outline-secondary btn-with-icon">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to List</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-        {{ include('editeur/_delete_form.html.twig') }}
+
+    <div class="container publisher-container">
+        <div class="publisher-card">
+            <div class="publisher-header">
+                <h3 class="publisher-title">
+                    {{ editeur.nomEditeur }}
+                    <span class="publisher-id ms-2">ID: {{ editeur.id }}</span>
+                </h3>
+            </div>
+            
+            <div class="publisher-body">
+                <table class="info-table">
+                    <tbody>
+                        <tr>
+                            <th>
+                                <i class="fas fa-id-card info-icon"></i>
+                                ID
+                            </th>
+                            <td>{{ editeur.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <i class="fas fa-building info-icon"></i>
+                                Publisher Name
+                            </th>
+                            <td>{{ editeur.nomEditeur }}</td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <i class="fas fa-globe-americas info-icon"></i>
+                                Country
+                            </th>
+                            <td>
+                                <img src="https://flagcdn.com/w20/{{ editeur.pays|slice(0, 2)|lower }}.png" 
+                                     alt="{{ editeur.pays }}" 
+                                     class="country-flag"
+                                     onerror="this.src='https://via.placeholder.com/24x18?text={{ editeur.pays|slice(0, 2)|upper }}'; this.onerror='';">
+                                {{ editeur.pays }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <i class="fas fa-map-marker-alt info-icon"></i>
+                                Address
+                            </th>
+                            <td>
+                                {% if editeur.adresse %}
+                                    {{ editeur.adresse|nl2br }}
+                                {% else %}
+                                    <span class="text-muted fst-italic">No address provided</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <i class="fas fa-phone-alt info-icon"></i>
+                                Phone
+                            </th>
+                            <td>
+                                {% if editeur.telephone %}
+                                    <a href="tel:{{ editeur.telephone }}" class="text-decoration-none">
+                                        {{ editeur.telephone }}
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted fst-italic">No phone number provided</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="publisher-footer">
+                <div class="action-buttons">
+                    <a href="{{ path('app_editeur_edit', {'id': editeur.id}) }}" class="btn btn-primary btn-with-icon">
+                        <i class="fas fa-edit"></i>
+                        <span>Edit</span>
+                    </a>
+                    <a href="{{ path('app_editeur_index') }}" class="btn btn-secondary btn-with-icon">
+                        <i class="fas fa-list"></i>
+                        <span>Back to List</span>
+                    </a>
+                </div>
+                
+                <div class="danger-zone">
+                    <div class="danger-zone-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Danger Zone</span>
+                    </div>
+                    <div class="danger-zone-content">
+                        <p>Deleting this publisher will permanently remove it from the system. This action cannot be undone.</p>
+                        <p class="mb-0"><strong>Warning:</strong> This may affect books associated with this publisher.</p>
+                    </div>
+                    {{ include('editeur/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -1,41 +1,544 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des Éditeurs{% endblock %}
+{% block title %}Publishers{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .page-header {
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .table-container {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            margin-bottom: 2rem;
+        }
+        
+        .table-header {
+            background-color: #f8f9fc;
+            color: #4e73df;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e3e6f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-header h5 {
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+        
+        .table-responsive {
+            padding: 1rem 1.5rem;
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table th {
+            background-color: #f8f9fc;
+            color: #5a5c69;
+            font-weight: 600;
+            border-top: none;
+            vertical-align: middle;
+        }
+        
+        .table td {
+            vertical-align: middle;
+        }
+        
+        .publisher-name {
+            font-weight: 600;
+            color: #4e73df;
+        }
+        
+        .publisher-country {
+            display: flex;
+            align-items: center;
+        }
+        
+        .country-flag {
+            width: 20px;
+            height: 15px;
+            margin-right: 0.5rem;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+        
+        .publisher-address {
+            color: #6c757d;
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .publisher-phone {
+            font-family: monospace;
+            color: #5a5c69;
+        }
+        
+        .btn-action {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            border-radius: 0.25rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .btn-view {
+            background-color: #36b9cc;
+            border-color: #36b9cc;
+            color: white;
+        }
+        
+        .btn-view:hover {
+            background-color: #2c9faf;
+            border-color: #2a96a5;
+            color: white;
+        }
+        
+        .btn-edit {
+            background-color: #f6c23e;
+            border-color: #f6c23e;
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background-color: #f4b619;
+            border-color: #f4b30d;
+            color: white;
+        }
+        
+        .btn-delete {
+            background-color: #e74a3b;
+            border-color: #e74a3b;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background-color: #d52a1a;
+            border-color: #c52a1a;
+            color: white;
+        }
+        
+        .badge-count {
+            background-color: #4e73df;
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+        
+        .empty-state {
+            padding: 3rem;
+            text-align: center;
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            color: #dddfeb;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state-text {
+            color: #858796;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-box {
+            position: relative;
+            max-width: 300px;
+        }
+        
+        .search-box input {
+            padding-left: 2.5rem;
+            border-radius: 2rem;
+            border: 1px solid #d1d3e2;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #858796;
+        }
+        
+        .search-box input:focus {
+            border-color: #bac8f3;
+            box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+        }
+        
+        .publisher-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .publisher-id {
+            font-family: monospace;
+            background-color: #f8f9fc;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            color: #5a5c69;
+        }
+        
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .page-link {
+            color: #4e73df;
+        }
+        
+        .page-item.active .page-link {
+            background-color: #4e73df;
+            border-color: #4e73df;
+        }
+        
+        .filter-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .filter-menu {
+            position: absolute;
+            right: 0;
+            z-index: 1000;
+            min-width: 10rem;
+            padding: 0.5rem 0;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 0.25rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+            display: none;
+        }
+        
+        .filter-menu.show {
+            display: block;
+        }
+        
+        .filter-item {
+            display: block;
+            width: 100%;
+            padding: 0.25rem 1.5rem;
+            clear: both;
+            font-weight: 400;
+            color: #3a3b45;
+            text-align: inherit;
+            white-space: nowrap;
+            background-color: transparent;
+            border: 0;
+            text-decoration: none;
+        }
+        
+        .filter-item:hover {
+            color: #2e2f37;
+            background-color: #f8f9fc;
+        }
+        
+        .filter-item.active {
+            color: #fff;
+            background-color: #4e73df;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-    <h1>Liste des Éditeurs</h1>
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="h2 mb-0">
+                        <i class="fas fa-building me-2 text-primary"></i>
+                        Publishers
+                    </h1>
+                    <p class="text-muted mb-0 mt-2">
+                        Manage your book publishers
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                    <a href="{{ path('app_editeur_new') }}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-1"></i>
+                        Add New Publisher
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <a href="{{ path('app_editeur_new') }}" class="btn btn-primary mb-3">Créer un nouvel éditeur</a>
-
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom de l'éditeur</th>
-                <th>Pays</th>
-                <th>Adresse</th>
-                <th>Téléphone</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for editeur in editeurs %}
-                <tr>
-                    <td>{{ editeur.id }}</td>
-                    <td>{{ editeur.nomEditeur }}</td>
-                    <td>{{ editeur.pays }}</td>
-                    <td>{{ editeur.adresse }}</td>
-                    <td>{{ editeur.telephone }}</td>
-                    <td>
-                        <a href="{{ path('app_editeur_show', {'id': editeur.id}) }}" class="btn btn-sm btn-info m-1">Voir</a>
-                        <a href="{{ path('app_editeur_edit', {'id': editeur.id}) }}" class="btn btn-sm btn-warning m-1">Modifier</a>
-                    </td>
-                </tr>
+    <!-- Main Content -->
+    <div class="container">
+        <div class="table-container">
+            <div class="table-header">
+                <h5>
+                    <i class="fas fa-list me-2"></i>
+                    All Publishers
+                    <span class="badge-count ms-2">{{ editeurs|length }}</span>
+                </h5>
+                <div class="d-flex align-items-center">
+                    <div class="search-box me-3">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="form-control" id="publisherSearch" placeholder="Search publishers...">
+                    </div>
+                    <div class="filter-dropdown">
+                        <button class="btn btn-outline-secondary btn-sm" id="filterButton">
+                            <i class="fas fa-filter me-1"></i>
+                            Filter
+                        </button>
+                        <div class="filter-menu" id="filterMenu">
+                            <h6 class="dropdown-header">Filter by Country</h6>
+                            <a href="#" class="filter-item active" data-filter="all">All Countries</a>
+                            <div class="dropdown-divider"></div>
+                            <div id="countryFilterItems">
+                                <!-- Country filters will be added dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% if editeurs|length > 0 %}
+                <div class="table-responsive">
+                    <table class="table table-hover" id="publishersTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">ID</th>
+                                <th style="width: 20%;">Publisher Name</th>
+                                <th style="width: 15%;">Country</th>
+                                <th>Address</th>
+                                <th style="width: 15%;">Phone</th>
+                                <th style="width: 180px;" class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for editeur in editeurs %}
+                                <tr data-country="{{ editeur.pays|lower }}">
+                                    <td>
+                                        <span class="publisher-id">{{ editeur.id }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="publisher-name">{{ editeur.nomEditeur }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="publisher-country">
+                                            <img src="https://flagcdn.com/w20/{{ editeur.pays|slice(0, 2)|lower }}.png" 
+                                                 alt="{{ editeur.pays }}" 
+                                                 class="country-flag"
+                                                 onerror="this.src='https://via.placeholder.com/20x15?text={{ editeur.pays|slice(0, 2)|upper }}'; this.onerror='';">
+                                            {{ editeur.pays }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="publisher-address" data-bs-toggle="tooltip" title="{{ editeur.adresse }}">
+                                            {{ editeur.adresse }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="publisher-phone">
+                                            <i class="fas fa-phone-alt me-1 text-primary"></i>
+                                            {{ editeur.telephone }}
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="publisher-actions">
+                                            <a href="{{ path('app_editeur_show', {'id': editeur.id}) }}" class="btn btn-action btn-view" data-bs-toggle="tooltip" title="View details">
+                                                <i class="fas fa-eye"></i>
+                                                <span>View</span>
+                                            </a>
+                                            <a href="{{ path('app_editeur_edit', {'id': editeur.id}) }}" class="btn btn-action btn-edit" data-bs-toggle="tooltip" title="Edit publisher">
+                                                <i class="fas fa-edit"></i>
+                                                <span>Edit</span>
+                                            </a>
+                                            <button type="button" class="btn btn-action btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal{{ editeur.id }}" title="Delete publisher">
+                                                <i class="fas fa-trash-alt"></i>
+                                                Delete
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- Delete Modal -->
+                                        <div class="modal fade" id="deleteModal{{ editeur.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ editeur.id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-danger text-white">
+                                                        <h5 class="modal-title" id="deleteModalLabel{{ editeur.id }}">
+                                                            <i class="fas fa-exclamation-triangle me-2"></i>
+                                                            Confirm Deletion
+                                                        </h5>
+                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Are you sure you want to delete the publisher <strong>"{{ editeur.nomEditeur }}"</strong>?</p>
+                                                        <p class="text-danger mb-0"><strong>Warning:</strong> This action cannot be undone and may affect books published by this publisher.</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                            <i class="fas fa-times me-1"></i>
+                                                            Cancel
+                                                        </button>
+                                                        <form method="post" action="{{ path('app_editeur_delete', {'id': editeur.id}) }}" class="d-inline">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ editeur.id) }}">
+                                                            <button type="submit" class="btn btn-danger">
+                                                                <i class="fas fa-trash-alt me-1"></i>
+                                                                Delete
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                               
             {% else %}
-                <tr>
-                    <td colspan="6" class="text-center">Aucun enregistrement trouvé</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h4>No Publishers Found</h4>
+                    <p class="empty-state-text">There are no publishers in the database yet.</p>
+                    <a href="{{ path('app_editeur_new') }}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-1"></i>
+                        Add Your First Publisher
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Search functionality
+            const searchInput = document.getElementById('publisherSearch');
+            const table = document.getElementById('publishersTable');
+            const rows = table ? table.querySelectorAll('tbody tr') : [];
+            
+            searchInput.addEventListener('keyup', function() {
+                const searchTerm = searchInput.value.toLowerCase();
+                
+                rows.forEach(row => {
+                    const publisherName = row.querySelector('.publisher-name').textContent.toLowerCase();
+                    const country = row.querySelector('.publisher-country').textContent.toLowerCase();
+                    const address = row.querySelector('.publisher-address').textContent.toLowerCase();
+                    const phone = row.querySelector('.publisher-phone').textContent.toLowerCase();
+                    
+                    if (publisherName.includes(searchTerm) || 
+                        country.includes(searchTerm) || 
+                        address.includes(searchTerm) || 
+                        phone.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Filter dropdown toggle
+            const filterButton = document.getElementById('filterButton');
+            const filterMenu = document.getElementById('filterMenu');
+            
+            filterButton.addEventListener('click', function() {
+                filterMenu.classList.toggle('show');
+            });
+            
+            // Close the dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!filterButton.contains(event.target) && !filterMenu.contains(event.target)) {
+                    filterMenu.classList.remove('show');
+                }
+            });
+            
+            // Generate country filters
+            const countryFilterItems = document.getElementById('countryFilterItems');
+            const countries = new Set();
+            
+            rows.forEach(row => {
+                const country = row.getAttribute('data-country');
+                if (country) {
+                    countries.add(country);
+                }
+            });
+            
+            countries.forEach(country => {
+                const filterItem = document.createElement('a');
+                filterItem.href = '#';
+                filterItem.className = 'filter-item';
+                filterItem.setAttribute('data-filter', country);
+                filterItem.textContent = country.charAt(0).toUpperCase() + country.slice(1);
+                countryFilterItems.appendChild(filterItem);
+                
+                filterItem.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Update active state
+                    document.querySelectorAll('.filter-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Filter rows
+                    const filter = this.getAttribute('data-filter');
+                    rows.forEach(row => {
+                        if (filter === 'all' || row.getAttribute('data-country') === filter) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                    
+                    // Close dropdown
+                    filterMenu.classList.remove('show');
+                });
+            });
+            
+            // Add event listener for "All Countries" filter
+            const allCountriesFilter = document.querySelector('.filter-item[data-filter="all"]');
+            if (allCountriesFilter) {
+                allCountriesFilter.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Update active state
+                    document.querySelectorAll('.filter-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Show all rows
+                    rows.forEach(row => {
+                        row.style.display = '';
+                    });
+                    
+                    // Close dropdown
+                    filterMenu.classList.remove('show');
+                });
+            }
+        });
+    </script>
+{% endblock %}
+
+              

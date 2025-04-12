@@ -1,27 +1,171 @@
-{{ form_start(form, {'attr': {'class': 'my-3'}}) }}
-    <div class="mb-3">
-        {{ form_label(form.nomEditeur, 'Nom de l\'éditeur', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.nomEditeur, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.nomEditeur) }}
-    </div>
+{{ form_start(form, {
+    'attr': {
+        'class': 'publisher-form needs-validation',
+        'novalidate': 'novalidate'
+    }
+}) }}
 
-    <div class="mb-3">
-        {{ form_label(form.pays, 'Pays', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.pays, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.pays) }}
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="{{ form.nomEditeur.vars.id }}" class="form-label fw-bold">
+                <i class="fas fa-building text-primary me-1"></i>
+                Publisher Name <span class="text-danger">*</span>
+            </label>
+            {{ form_widget(form.nomEditeur, {
+                'attr': {
+                    'class': 'form-control form-control-lg',
+                    'placeholder': 'Enter publisher name',
+                    'required': 'required'
+                }
+            }) }}
+            <div class="invalid-feedback">
+                {{ form_errors(form.nomEditeur) }}
+            </div>
+            <small class="form-text text-muted">
+                The official name of the publishing company
+            </small>
+        </div>
     </div>
-
-    <div class="mb-3">
-        {{ form_label(form.adresse, 'Adresse', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.adresse, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.adresse) }}
+    
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="{{ form.pays.vars.id }}" class="form-label fw-bold">
+                <i class="fas fa-globe-americas text-primary me-1"></i>
+                Country <span class="text-danger">*</span>
+            </label>
+            {{ form_widget(form.pays, {
+                'attr': {
+                    'class': 'form-control form-select country-select',
+                    'placeholder': 'Select country',
+                    'required': 'required',
+                    'data-live-search': 'true'
+                }
+            }) }}
+            <div class="invalid-feedback">
+                {{ form_errors(form.pays) }}
+            </div>
+            <small class="form-text text-muted">
+                Country where the publisher is headquartered
+            </small>
+        </div>
     </div>
-
-    <div class="mb-3">
-        {{ form_label(form.telephone, 'Téléphone', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.telephone, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.telephone) }}
+    
+    <div class="col-12">
+        <div class="form-group mb-3">
+            <label for="{{ form.adresse.vars.id }}" class="form-label fw-bold">
+                <i class="fas fa-map-marker-alt text-primary me-1"></i>
+                Address
+            </label>
+            {{ form_widget(form.adresse, {
+                'attr': {
+                    'class': 'form-control',
+                    'placeholder': 'Enter full address',
+                    'rows': 3
+                }
+            }) }}
+            <div class="invalid-feedback">
+                {{ form_errors(form.adresse) }}
+            </div>
+            <small class="form-text text-muted">
+                Complete mailing address including street, city, and postal code
+            </small>
+        </div>
     </div>
+    
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="{{ form.telephone.vars.id }}" class="form-label fw-bold">
+                <i class="fas fa-phone-alt text-primary me-1"></i>
+                Phone Number
+            </label>
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="fas fa-phone"></i>
+                </span>
+                {{ form_widget(form.telephone, {
+                    'attr': {
+                        'class': 'form-control phone-mask',
+                        'placeholder': '+XX XXX XXX XXX'
+                    }
+                }) }}
+            </div>
+            <div class="invalid-feedback">
+                {{ form_errors(form.telephone) }}
+            </div>
+            <small class="form-text text-muted">
+                Include country code (e.g., +33 for France)
+            </small>
+        </div>
+    </div>
+</div>
 
-    <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+<div class="form-group mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+        {% if show_cancel|default(true) %}
+            <a href="{{ path('app_editeur_index') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-times me-1"></i>
+                Cancel
+            </a>
+        {% else %}
+            <div></div>
+        {% endif %}
+        
+        <button type="submit" class="btn btn-primary btn-lg px-4">
+            <i class="fas fa-{{ button_icon|default('save') }} me-1"></i>
+            {{ button_label|default('Save Publisher') }}
+        </button>
+    </div>
+</div>
+
+{{ form_rest(form) }}
 {{ form_end(form) }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Phone number formatting
+        const phoneInput = document.querySelector('.phone-mask');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 0 && value.charAt(0) !== '+') {
+                    value = '+' + value;
+                }
+                
+                // Format with spaces
+                if (value.length > 3) {
+                    let formattedValue = value.substring(0, 3);
+                    for (let i = 3; i < value.length; i += 3) {
+                        formattedValue += ' ' + value.substring(i, i + 3);
+                    }
+                    e.target.value = formattedValue;
+                } else {
+                    e.target.value = value;
+                }
+            });
+        }
+        
+        // Form validation
+        const form = document.querySelector('.publisher-form');
+        if (form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                
+                form.classList.add('was-validated');
+            });
+        }
+        
+        // Enhanced country select (if using Select2 or similar)
+        const countrySelect = document.querySelector('.country-select');
+        if (countrySelect && typeof $.fn.select2 !== 'undefined') {
+            $(countrySelect).select2({
+                theme: 'bootstrap4',
+                placeholder: 'Select a country',
+                allowClear: true
+            });
+        }
+    });
+</script>
