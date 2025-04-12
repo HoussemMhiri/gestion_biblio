@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'Éditeur{% endblock %}
+
+{% block body %}
+    <h1>Modifier l'Éditeur</h1>
+
+    {{ include('editeur/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+    <div class="mt-3 mb-3">
+        <a href="{{ path('app_editeur_index') }}" class="btn btn-secondary">Retour à la liste</a>
+    </div>
+        {{ include('editeur/_delete_form.html.twig') }}
+{% endblock %}

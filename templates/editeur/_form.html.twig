@@ -1,0 +1,27 @@
+{{ form_start(form, {'attr': {'class': 'my-3'}}) }}
+    <div class="mb-3">
+        {{ form_label(form.nomEditeur, 'Nom de l\'éditeur', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.nomEditeur, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.nomEditeur) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.pays, 'Pays', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.pays, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.pays) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.adresse, 'Adresse', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.adresse, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.adresse) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.telephone, 'Téléphone', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.telephone, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.telephone) }}
+    </div>
+
+    <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}

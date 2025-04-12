@@ -1,0 +1,57 @@
+{{ form_start(form, {'attr': {'class': 'my-3'}}) }}
+    <div class="mb-3">
+        {{ form_label(form.titre, 'Titre', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.titre) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.nbPages, 'Nombre de pages', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.nbPages, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.nbPages) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.dateEdition, 'Date d\'édition', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.dateEdition, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.dateEdition) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.nbExemplaires, 'Nombre d\'exemplaires', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.nbExemplaires, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.nbExemplaires) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.prix, 'Prix', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.prix, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.prix) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.isbn, 'ISBN', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.isbn, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.isbn) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.editeur, 'Éditeur', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.editeur, {'attr': {'class': 'form-select'}}) }}
+        {{ form_errors(form.editeur) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.categorie, 'Catégorie', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.categorie, {'attr': {'class': 'form-select'}}) }}
+        {{ form_errors(form.categorie) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.auteurs, 'Auteurs', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.auteurs, {'attr': {'class': 'form-select'}}) }}
+        {{ form_errors(form.auteurs) }}
+    </div>
+
+    <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}

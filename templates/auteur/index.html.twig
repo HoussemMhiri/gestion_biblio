@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Auteurs{% endblock %}
+
+{% block body %}
+    <h1>Liste des Auteurs</h1>
+
+    <a href="{{ path('app_auteur_new') }}" class="btn btn-primary mb-3">Créer un nouvel auteur</a>
+
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Biographie</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for auteur in auteurs %}
+                <tr>
+                    <td>{{ auteur.id }}</td>
+                    <td>{{ auteur.prenom }}</td>
+                    <td>{{ auteur.nom }}</td>
+                    <td>{{ auteur.biographie }}</td>
+                    <td>
+                        <a href="{{ path('app_auteur_show', {'id': auteur.id}) }}" class="btn btn-sm btn-info m-1">Voir</a>
+                        <a href="{{ path('app_auteur_edit', {'id': auteur.id}) }}" class="btn btn-sm btn-warning m-1">Modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">Aucun enregistrement trouvé</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

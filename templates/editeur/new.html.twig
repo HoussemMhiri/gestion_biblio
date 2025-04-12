@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvel Éditeur{% endblock %}
+
+{% block body %}
+    <h1>Créer un nouvel Éditeur</h1>
+
+    {{ include('editeur/_form.html.twig') }}
+
+    <a href="{{ path('app_editeur_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+{% endblock %}
