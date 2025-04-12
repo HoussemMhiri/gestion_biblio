@@ -1,14 +1,296 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier la Catégorie{% endblock %}
+{% block title %}Edit Category: {{ categorie.designation }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .page-header {
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "›";
+            font-weight: bold;
+        }
+        
+        .form-container {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .form-header {
+            background-color: #f8f9fc;
+            color: #4e73df;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e3e6f0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-header h5 {
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+        
+        .form-header-icon {
+            background-color: #4e73df;
+            color: white;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .form-body {
+            padding: 1.5rem;
+        }
+        
+        .form-footer {
+            background-color: #f8f9fc;
+            border-top: 1px solid #e3e6f0;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+        
+        .action-bar {
+            background-color: #fff;
+            border-top: 1px solid #e3e6f0;
+            padding: 1rem 0;
+            position: sticky;
+            bottom: 0;
+            z-index: 100;
+            box-shadow: 0 -0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+        }
+        
+        .danger-zone {
+            background-color: #fff8f8;
+            border: 1px solid #f5c6cb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 5rem;
+        }
+        
+        .danger-zone-header {
+            color: #721c24;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .danger-zone-header i {
+            margin-right: 0.5rem;
+        }
+        
+        .danger-zone-content {
+            color: #721c24;
+            margin-bottom: 1rem;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 5rem;
+            right: 2rem;
+            display: none;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background-color: rgba(78, 115, 223, 0.5);
+            color: white;
+            text-align: center;
+            line-height: 3rem;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .back-to-top:hover {
+            background-color: rgba(78, 115, 223, 0.8);
+            color: white;
+        }
+        
+        .back-to-top.show {
+            display: block;
+        }
+        
+        .category-badge {
+            background-color: #4e73df;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-    <h1>Modifier la Catégorie</h1>
-
-    {{ include('categorie/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
-
-    <div class="mt-3 mb-3">
-        <a href="{{ path('app_categorie_index') }}" class="btn btn-secondary">Retour à la liste</a>
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-7">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-2">
+                            <li class="breadcrumb-item">
+                                <a href="{{ path('app_categorie_index') }}" class="text-decoration-none">
+                                    <i class="fas fa-folder"></i> Categories
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{ path('app_categorie_show', {'id': categorie.id}) }}" class="text-decoration-none">
+                                    {{ categorie.designation }}
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                        </ol>
+                    </nav>
+                    <h1 class="h2 mb-0 d-flex align-items-center">
+                        <i class="fas fa-edit me-2 text-primary"></i>
+                        Edit Category
+                        <span class="category-badge">ID: {{ categorie.id }}</span>
+                    </h1>
+                    <p class="text-muted mt-2 mb-0">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Update the information for "{{ categorie.designation }}"
+                    </p>
+                </div>
+                <div class="col-md-5 text-md-end mt-3 mt-md-0">
+                    <a href="{{ path('app_categorie_show', {'id': categorie.id}) }}" class="btn btn-outline-primary action-btn me-2">
+                        <i class="fas fa-eye"></i>
+                        <span>View Details</span>
+                    </a>
+                    <a href="{{ path('app_categorie_index') }}" class="btn btn-outline-secondary action-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to List</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-        {{ include('categorie/_delete_form.html.twig') }}
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Form Container -->
+        <div class="form-container">
+            <div class="form-header">
+                <div class="form-header-icon">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <h5>Category Information</h5>
+            </div>
+            <div class="form-body">
+                
+
+                {{ include('categorie/_form.html.twig', {
+                    'button_label': 'Update Category',
+                    'button_icon': 'save',
+                    'show_cancel': false
+                }) }}
+            </div>
+        </div>
+        
+        <!-- Danger Zone -->
+        <div class="danger-zone">
+            <div class="danger-zone-header">
+                <i class="fas fa-exclamation-triangle"></i>
+                Danger Zone
+            </div>
+            <div class="danger-zone-content">
+                <p>Permanently delete this category. This action cannot be undone.</p>
+                {% if categorie.livres is defined and categorie.livres|length > 0 %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <strong>Warning:</strong> This category contains {{ categorie.livres|length }} books. Deleting it may affect these books.
+                    </div>
+                {% endif %}
+            </div>
+            {{ include('categorie/_delete_form.html.twig', {
+                'button_label': 'Delete this category',
+                'button_class': 'btn-outline-danger'
+            }) }}
+        </div>
+    </div>
+    
+  
+    
+    <!-- Back to top button -->
+    <a href="#" class="back-to-top text-decoration-none" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </a>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add ID to the form for the sticky action bar
+            const categoryForm = document.querySelector('.category-form');
+            if (categoryForm) {
+                categoryForm.id = 'edit-category-form';
+            }
+            
+            // Back to top button functionality
+            const backToTopButton = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
+            });
+            
+            backToTopButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Form validation enhancement
+            if (categoryForm) {
+                categoryForm.addEventListener('submit', function(event) {
+                    if (!categoryForm.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        
+                        // Find the first invalid field and focus it
+                        const invalidField = categoryForm.querySelector(':invalid');
+                        if (invalidField) {
+                            invalidField.focus();
+                            
+                            // Scroll to the invalid field with some offset
+                            const yOffset = -100; 
+                            const y = invalidField.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                            window.scrollTo({top: y, behavior: 'smooth'});
+                        }
+                    }
+                    
+                    categoryForm.classList.add('was-validated');
+                });
+            }
+        });
+    </script>
 {% endblock %}

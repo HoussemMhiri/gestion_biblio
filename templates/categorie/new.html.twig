@@ -1,11 +1,170 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouvelle Catégorie{% endblock %}
+{% block title %}Add New Category{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .page-header {
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "›";
+            font-weight: bold;
+        }
+        
+        .form-container {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .form-header {
+            background-color: #f8f9fc;
+            color: #4e73df;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .form-header h5 {
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+        
+        .form-body {
+            padding: 1.5rem;
+        }
+        
+        .form-footer {
+            background-color: #f8f9fc;
+            border-top: 1px solid #e3e6f0;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .tips-card {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .tips-header {
+            background-color: #4e73df;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #4668ce;
+        }
+        
+        .tips-header h5 {
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+        
+        .tips-body {
+            padding: 1.5rem;
+        }
+        
+        .tip-item {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        
+        .tip-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .tip-icon {
+            flex: 0 0 2rem;
+            height: 2rem;
+            background-color: #e8f0fe;
+            color: #4e73df;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+        
+        .tip-content {
+            flex: 1;
+        }
+        
+        .tip-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .tip-text {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-    <h1>Créer une nouvelle Catégorie</h1>
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-2">
+                            <li class="breadcrumb-item">
+                                <a href="{{ path('app_categorie_index') }}" class="text-decoration-none">
+                                    <i class="fas fa-folder"></i> Categories
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Add New</li>
+                        </ol>
+                    </nav>
+                    <h1 class="h2 mb-0">
+                        <i class="fas fa-folder-plus me-2 text-primary"></i>
+                        Add New Category
+                    </h1>
+                </div>
+                <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                    <a href="{{ path('app_categorie_index') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-1"></i>
+                        Back to Categories
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    {{ include('categorie/_form.html.twig') }}
-
-    <a href="{{ path('app_categorie_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Form Container -->
+                <div class="form-container">
+                    <div class="form-header">
+                        <h5>
+                            <i class="fas fa-plus-circle me-2"></i>
+                            Category Information
+                        </h5>
+                    </div>
+                    <div class="form-body">
+                        {{ include('categorie/_form.html.twig', {
+                            'button_label': 'Create Category',
+                            'button_icon': 'plus-circle',
+                            'show_cancel': false
+                        }) }}
+                    </div>
+                </div>
+            </div>
+            
+          
+        </div>
+    </div>
 {% endblock %}
