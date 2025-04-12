@@ -1,57 +1,270 @@
-{{ form_start(form, {'attr': {'class': 'my-3'}}) }}
-    <div class="mb-3">
-        {{ form_label(form.titre, 'Titre', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.titre) }}
-    </div>
+{{ form_start(form, {'attr': {'class': 'book-form needs-validation'}}) }}
 
-    <div class="mb-3">
-        {{ form_label(form.nbPages, 'Nombre de pages', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.nbPages, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.nbPages) }}
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-light">
+        <h5 class="mb-0">
+            <i class="fas fa-book-open me-2 text-primary"></i>
+            Book Information
+        </h5>
     </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <!-- Title -->
+            <div class="col-md-12">
+                <div class="form-group">
+                    {{ form_label(form.titre, 'Title', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-heading text-primary"></i>
+                        </span>
+                        {{ form_widget(form.titre, {
+                            'attr': {
+                                'class': 'form-control form-control-lg',
+                                'placeholder': 'Enter book title'
+                            }
+                        }) }}
+                    </div>
+                    <div class="form-text text-danger">
+                        {{ form_errors(form.titre) }}
+                    </div>
+                    <div class="form-text text-muted">
+                        <small>The title will be displayed in book listings and search results</small>
+                    </div>
+                </div>
+            </div>
 
-    <div class="mb-3">
-        {{ form_label(form.dateEdition, 'Date d\'édition', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.dateEdition, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.dateEdition) }}
+            <!-- ISBN -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.isbn, 'ISBN', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-barcode text-primary"></i>
+                        </span>
+                        {{ form_widget(form.isbn, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Enter ISBN number'
+                            }
+                        }) }}
+                    </div>
+                    <div class="form-text text-danger">
+                        {{ form_errors(form.isbn) }}
+                    </div>
+                    <div class="form-text text-muted">
+                        <small>International Standard Book Number (unique identifier)</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Price -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.prix, 'Price', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-dollar-sign text-primary"></i>
+                        </span>
+                        {{ form_widget(form.prix, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Enter price'
+                            }
+                        }) }}
+                    </div>
+                    <div class="form-text text-danger">
+                        {{ form_errors(form.prix) }}
+                    </div>
+                    <div class="form-text text-muted">
+                        <small>Retail price in USD</small>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="mb-3">
-        {{ form_label(form.nbExemplaires, 'Nombre d\'exemplaires', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.nbExemplaires, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.nbExemplaires) }}
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-light">
+        <h5 class="mb-0">
+            <i class="fas fa-info-circle me-2 text-primary"></i>
+            Details & Specifications
+        </h5>
     </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <!-- Number of Pages -->
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{ form_label(form.nbPages, 'Number of Pages', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-file-alt text-primary"></i>
+                        </span>
+                        {{ form_widget(form.nbPages, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Enter page count'
+                            }
+                        }) }}
+                    </div>
+                    <div class="form-text text-danger">
+                        {{ form_errors(form.nbPages) }}
+                    </div>
+                </div>
+            </div>
 
-    <div class="mb-3">
-        {{ form_label(form.prix, 'Prix', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.prix, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.prix) }}
+            <!-- Publication Date -->
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{ form_label(form.dateEdition, 'Publication Date', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-calendar-alt text-primary"></i>
+                        </span>
+                        {{ form_widget(form.dateEdition, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Select date'
+                            }
+                        }) }}
+                    </div>
+                    <div class="form-text text-danger">
+                        {{ form_errors(form.dateEdition) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Number of Copies -->
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{ form_label(form.nbExemplaires, 'Number of Copies', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-copy text-primary"></i>
+                        </span>
+                        {{ form_widget(form.nbExemplaires, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Enter quantity'
+                            }
+                        }) }}
+                    </div>
+                    <div class="form-text text-danger">
+                        {{ form_errors(form.nbExemplaires) }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="mb-3">
-        {{ form_label(form.isbn, 'ISBN', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.isbn, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.isbn) }}
-    </div>
+{# Render any remaining fields that weren't explicitly included above #}
+{% for field in form %}
+    {% if field.vars.name != 'titre' and 
+          field.vars.name != 'isbn' and 
+          field.vars.name != 'prix' and 
+          field.vars.name != 'nbPages' and 
+          field.vars.name != 'dateEdition' and 
+          field.vars.name != 'nbExemplaires' and
+          field.vars.name != 'editeur' and
+          field.vars.name != 'categorie' and
+          field.vars.name != 'auteurs' %}
+        <div class="mb-3">
+            {{ form_row(field) }}
+        </div>
+    {% endif %}
+{% endfor %}
 
-    <div class="mb-3">
-        {{ form_label(form.editeur, 'Éditeur', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.editeur, {'attr': {'class': 'form-select'}}) }}
-        {{ form_errors(form.editeur) }}
-    </div>
+{# Add hidden fields for editeur, categorie, and auteurs if they exist in the form #}
+{% if form.editeur is defined %}
+    {{ form_widget(form.editeur, {'attr': {'style': 'display: none'}}) }}
+{% endif %}
 
-    <div class="mb-3">
-        {{ form_label(form.categorie, 'Catégorie', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.categorie, {'attr': {'class': 'form-select'}}) }}
-        {{ form_errors(form.categorie) }}
-    </div>
+{% if form.categorie is defined %}
+    {{ form_widget(form.categorie, {'attr': {'style': 'display: none'}}) }}
+{% endif %}
 
-    <div class="mb-3">
-        {{ form_label(form.auteurs, 'Auteurs', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.auteurs, {'attr': {'class': 'form-select'}}) }}
-        {{ form_errors(form.auteurs) }}
-    </div>
+{% if form.auteurs is defined %}
+    {{ form_widget(form.auteurs, {'attr': {'style': 'display: none'}}) }}
+{% endif %}
 
-    <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+<div class="d-flex justify-content-between">
+    <a href="{{ path('app_livre_index') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-1"></i> Cancel
+    </a>
+    <button type="submit" class="btn btn-primary px-4">
+        <i class="fas fa-save me-1"></i> {{ button_label|default('Save') }}
+    </button>
+</div>
+
 {{ form_end(form) }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Select2 if available
+        if (typeof $ !== 'undefined' && $.fn.select2) {
+            $('.form-select').select2({
+                theme: 'bootstrap-5',
+                width: '100%'
+            });
+        }
+        
+        // Add datepicker functionality if available
+        if (typeof $ !== 'undefined' && $.fn.datepicker) {
+            $('input[type="date"]').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true
+            });
+        }
+    });
+</script>
+
+<style>
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .input-group-text {
+        width: 40px;
+        justify-content: center;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #bac8f3;
+        box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+    }
+    
+    .form-text.text-danger {
+        font-weight: 500;
+    }
+    
+    .card {
+        overflow: hidden;
+        border: none;
+    }
+    
+    .card-header {
+        padding: 1rem 1.25rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    .select2-container--bootstrap-5 .select2-selection {
+        border: 1px solid #d1d3e2;
+        height: calc(1.5em + 0.75rem + 2px);
+    }
+    
+    .select2-container--bootstrap-5 .select2-selection--multiple {
+        height: auto;
+        min-height: calc(1.5em + 0.75rem + 2px);
+    }
+    
+    .select2-container--bootstrap-5.select2-container--focus .select2-selection {
+        border-color: #bac8f3;
+        box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+    }
+</style>

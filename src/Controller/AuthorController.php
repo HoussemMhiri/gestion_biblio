@@ -12,12 +12,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/auteur')]
-final class AuteurController extends AbstractController{
+final class AuthorController extends AbstractController
+{
     #[Route(name: 'app_auteur_index', methods: ['GET'])]
     public function index(AuteurRepository $auteurRepository): Response
     {
+        $auteurs = $auteurRepository->findBy([], ['nom' => 'ASC']); // Sort authors by last name
         return $this->render('auteur/index.html.twig', [
-            'auteurs' => $auteurRepository->findAll(),
+            'auteurs' => $auteurs,
         ]);
     }
 
@@ -32,11 +34,11 @@ final class AuteurController extends AbstractController{
             $entityManager->persist($auteur);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_auteur_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Author created successfully!');
+            return $this->redirectToRoute('app_auteur_index');
         }
 
         return $this->render('auteur/new.html.twig', [
-            'auteur' => $auteur,
             'form' => $form,
         ]);
     }
@@ -45,7 +47,7 @@ final class AuteurController extends AbstractController{
     public function show(Auteur $auteur): Response
     {
         return $this->render('auteur/show.html.twig', [
-            'auteur' => $auteur,
+            'auteur' => $auteur, // Pass the auteur variable
         ]);
     }
 
@@ -58,23 +60,26 @@ final class AuteurController extends AbstractController{
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_auteur_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Author updated successfully!');
+            return $this->redirectToRoute('app_auteur_index');
         }
 
         return $this->render('auteur/edit.html.twig', [
-            'auteur' => $auteur,
             'form' => $form,
+            'auteur' => $auteur, // Pass the auteur variable
         ]);
     }
 
     #[Route('/{id}', name: 'app_auteur_delete', methods: ['POST'])]
     public function delete(Request $request, Auteur $auteur, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$auteur->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $auteur->getId(), $request->request->get('_token'))) {
             $entityManager->remove($auteur);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Author deleted successfully!');
         }
 
-        return $this->redirectToRoute('app_auteur_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_auteur_index');
     }
 }

@@ -1,34 +1,217 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails de l'Auteur{% endblock %}
+{% block title %}Author Details{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .author-profile {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .author-header {
+            background: linear-gradient(40deg, #4e73df 0%, #36b9cc 100%);
+            color: white;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .author-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            border: 5px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .author-avatar i {
+            font-size: 3rem;
+            color: #4e73df;
+        }
+        
+        .author-name {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .author-meta {
+            text-align: center;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        
+        .author-details {
+            padding: 2rem;
+        }
+        
+        .detail-item {
+            margin-bottom: 1.5rem;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #5a5c69;
+            margin-bottom: 0.5rem;
+        }
+        
+        .detail-value {
+            background-color: #f8f9fc;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            border: 1px solid #e3e6f0;
+        }
+        
+        .biography-content {
+            white-space: pre-line;
+            line-height: 1.6;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1.5rem;
+            background-color: #f8f9fc;
+            border-top: 1px solid #e3e6f0;
+        }
+        
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "›";
+        }
+        
+        .books-section {
+            margin-top: 2rem;
+        }
+        
+        .book-card {
+            height: 100%;
+            transition: transform 0.2s;
+        }
+        
+        .book-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-    <h1>Détails de l'Auteur</h1>
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_livre_index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_auteur_index') }}">Authors</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Details</li>
+        </ol>
+    </nav>
 
-    <table class="table table-bordered">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ auteur.id }}</td>
-            </tr>
-            <tr>
-                <th>Prénom</th>
-                <td>{{ auteur.prenom }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ auteur.nom }}</td>
-            </tr>
-            <tr>
-                <th>Biographie</th>
-                <td>{{ auteur.biographie }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="mt-3 mb-3">
-        <a href="{{ path('app_auteur_index') }}" class="btn btn-secondary">Retour à la liste</a>
-        <a href="{{ path('app_auteur_edit', {'id': auteur.id}) }}" class="btn btn-primary">Modifier</a>
+    <div class="author-profile">
+        <!-- Author Header -->
+        <div class="author-header">
+            <div class="author-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <h1 class="author-name">{{ auteur.prenom }} {{ auteur.nom }}</h1>
+           
+        </div>
+        
+        <!-- Author Details -->
+        <div class="author-details">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <i class="fas fa-id-card me-2 text-primary"></i> First Name
+                        </div>
+                        <div class="detail-value">
+                            {{ auteur.prenom }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <i class="fas fa-user-tag me-2 text-primary"></i> Last Name
+                        </div>
+                        <div class="detail-value">
+                            {{ auteur.nom }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">
+                    <i class="fas fa-book-open me-2 text-primary"></i> Biography
+                </div>
+                <div class="detail-value biography-content">
+                    {% if auteur.biographie %}
+                        {{ auteur.biographie|nl2br }}
+                    {% else %}
+                        <em class="text-muted">No biography available for this author.</em>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="{{ path('app_auteur_index') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Back to list
+            </a>
+            <a href="{{ path('app_auteur_edit', {'id': auteur.id}) }}" class="btn btn-primary">
+                <i class="fas fa-edit me-1"></i> Edit
+            </a>
+            {{ include('auteur/_delete_form.html.twig') }}
+        </div>
     </div>
-        {{ include('auteur/_delete_form.html.twig') }}
+    
+    <!-- Books by this Author -->
+    {% if auteur.livres is defined and auteur.livres|length > 0 %}
+        <div class="books-section">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-books me-2 text-primary"></i>
+                        Books by {{ auteur.prenom }} {{ auteur.nom }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        {% for livre in auteur.livres %}
+                            <div class="col">
+                                <div class="card h-100 book-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ livre.titre }}</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            {% if livre.categorie is defined %}
+                                                {{ livre.categorie }}
+                                            {% endif %}
+                                        </h6>
+                                        <p class="card-text">
+                                            {% if livre.description is defined %}
+                                                {{ livre.description|striptags|length > 100 ? livre.description|striptags|slice(0, 100) ~ '...' : livre.description|striptags }}
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <div class="card-footer bg-transparent">
+                                        <a href="{{ path('app_livre_show', {'id': livre.id}) }}" class="btn btn-sm btn-outline-primary">View Book</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

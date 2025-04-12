@@ -12,7 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/livre')]
-final class LivreController extends AbstractController{
+final class BookController extends AbstractController
+{
     #[Route(name: 'app_livre_index', methods: ['GET'])]
     public function index(LivreRepository $livreRepository): Response
     {
@@ -70,7 +71,7 @@ final class LivreController extends AbstractController{
     #[Route('/{id}', name: 'app_livre_delete', methods: ['POST'])]
     public function delete(Request $request, Livre $livre, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$livre->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $livre->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($livre);
             $entityManager->flush();
         }
@@ -78,50 +79,48 @@ final class LivreController extends AbstractController{
         return $this->redirectToRoute('app_livre_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    
+
     #[Route('/extra/dql-methods', name: 'app_livre_extra_dql_methods', methods: ['GET'])]
     public function extraDqlMethods(LivreRepository $livreRepository)
     {
-        
+
         $findByPrixSup = $livreRepository->findByPrixSup(10);
-        $findByPrixPages = $livreRepository->findByPrixPages(10 , 12);
-        $findByPrixPages10 = $livreRepository->findByPrixPages10(10 , 12);
-        $findByPrixPagesTrie = $livreRepository->findByPrixPagesTrie(10 , 12);
-        $findByPrixPages10Trie = $livreRepository->findByPrixPages10Trie(10 , 12);
-        $findByPrixPagesAuteurTrie = $livreRepository->findByPrixPagesAuteurTrie(10 , 12);
+        $findByPrixPages = $livreRepository->findByPrixPages(10, 12);
+        $findByPrixPages10 = $livreRepository->findByPrixPages10(10, 12);
+        $findByPrixPagesTrie = $livreRepository->findByPrixPagesTrie(10, 12);
+        $findByPrixPages10Trie = $livreRepository->findByPrixPages10Trie(10, 12);
+        $findByPrixPagesAuteurTrie = $livreRepository->findByPrixPagesAuteurTrie(10, 12);
 
 
         dd(
             $findByPrixSup,
-            $findByPrixPages ,
-            $findByPrixPages10 ,
+            $findByPrixPages,
+            $findByPrixPages10,
             $findByPrixPagesTrie,
             $findByPrixPages10Trie,
             $findByPrixPagesAuteurTrie
         );
-        
     }
 
     #[Route('/extra/methods', name: 'app_livre_extra_methods', methods: ['GET'])]
     public function extraMethods(LivreRepository $livreRepository)
     {
-        
+
         $findByPrixSup = $livreRepository->findByPrixSup(10);
-        $findByPrixPages = $livreRepository->findByPrixPages(10 , 12);
-        $findByPrixPages10 = $livreRepository->findByPrixPages10(10 , 12);
-        $findByPrixPagesTrie = $livreRepository->findByPrixPagesTrie(10 , 12);
-        $findByPrixPages10Trie = $livreRepository->findByPrixPages10Trie(10 , 12);
-        $findByPrixPagesAuteurTrie = $livreRepository->findByPrixPagesAuteurTrie(10 , 12);
+        $findByPrixPages = $livreRepository->findByPrixPages(10, 12);
+        $findByPrixPages10 = $livreRepository->findByPrixPages10(10, 12);
+        $findByPrixPagesTrie = $livreRepository->findByPrixPagesTrie(10, 12);
+        $findByPrixPages10Trie = $livreRepository->findByPrixPages10Trie(10, 12);
+        $findByPrixPagesAuteurTrie = $livreRepository->findByPrixPagesAuteurTrie(10, 12);
 
 
         dd(
             $findByPrixSup,
-            $findByPrixPages ,
-            $findByPrixPages10 ,
+            $findByPrixPages,
+            $findByPrixPages10,
             $findByPrixPagesTrie,
             $findByPrixPages10Trie,
             $findByPrixPagesAuteurTrie
         );
-        
     }
 }

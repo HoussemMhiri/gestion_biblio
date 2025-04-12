@@ -1,42 +1,186 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
-{% block main %}
-    <div class="container">
-        <h1>Tableau de bord</h1>
+{% block head_stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
 
+{% block main %}
+    <div class="container-fluid px-4">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <i class="fas fa-download fa-sm text-white-50 me-2"></i>Export Data
+            </a>
+        </div>
+
+        <!-- Stats Cards -->
         <div class="row">
-            <div class="col-md-3">
-                <div class="card text-white bg-primary mb-3">
-                    <div class="card-header">Nombre d'auteurs</div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body">
-                        <h4 class="card-title">{{ nbAuteurs }}</h4>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Authors</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ nbAuteurs }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user-edit fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0">
+                        <a href="{{ ea_url().setController('App\\Controller\\Admin\\AuthorManagementController') }}" class="small text-primary stretched-link">View Details</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-white bg-success mb-3">
-                    <div class="card-header">Nombre de catégories</div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
                     <div class="card-body">
-                        <h4 class="card-title">{{ nbCategories }}</h4>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Categories</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ nbCategories }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-folder fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0">
+                        <a href="{{ ea_url().setController('App\\Controller\\Admin\\CategoryManagementController') }}" class="small text-success stretched-link">View Details</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-white bg-info mb-3">
-                    <div class="card-header">Nombre d'éditeurs</div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
                     <div class="card-body">
-                        <h4 class="card-title">{{ nbEditeurs }}</h4>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                    Publishers</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ nbEditeurs }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-building fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0">
+                        <a href="{{ ea_url().setController('App\\Controller\\Admin\\PublisherManagementController') }}" class="small text-info stretched-link">View Details</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-white bg-warning mb-3">
-                    <div class="card-header">Nombre de livres</div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
                     <div class="card-body">
-                        <h4 class="card-title">{{ nbLivres }}</h4>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Books</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ nbLivres }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-book fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0">
+                        <a href="{{ ea_url().setController('App\\Controller\\Admin\\BookManagementController') }}" class="small text-warning stretched-link">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Section -->
+        <div class="row">
+            <!-- Recent Books Column -->
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Recent Books</h6>
+                    </div>
+                    <div class="card-body">
+                        {% if recentLivres is not empty %}
+                            <ul class="list-group">
+                                {% for livre in recentLivres %}
+                                    <li class="list-group-item">
+                                        <strong>{{ livre.titre }}</strong> - {{ livre.dateEdition|date('d/m/Y') }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>No recent books available.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Column -->
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Statistics</h6>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="small font-weight-bold">Books by Category <span class="float-end">60%</span></h4>
+                        <div class="progress mb-4">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 60%" aria-valuenow="60"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <h4 class="small font-weight-bold">Books by Publisher <span class="float-end">40%</span></h4>
+                        <div class="progress mb-4">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 40%" aria-valuenow="40"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <h4 class="small font-weight-bold">Books by Author <span class="float-end">80%</span></h4>
+                        <div class="progress mb-4">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 80%" aria-valuenow="80"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <style>
+        .border-left-primary {
+            border-left: 0.25rem solid #4e73df !important;
+        }
+        .border-left-success {
+            border-left: 0.25rem solid #1cc88a !important;
+        }
+        .border-left-info {
+            border-left: 0.25rem solid #36b9cc !important;
+        }
+        .border-left-warning {
+            border-left: 0.25rem solid #f6c23e !important;
+        }
+        .text-gray-300 {
+            color: #dddfeb !important;
+        }
+        .text-gray-800 {
+            color: #5a5c69 !important;
+        }
+        .card-footer {
+            padding: 0.75rem 1.25rem;
+            background-color: #f8f9fc;
+            border-top: 0;
+        }
+        .stretched-link::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+            content: "";
+        }
+    </style>
 {% endblock %}
