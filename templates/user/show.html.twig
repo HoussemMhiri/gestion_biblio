@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User Details{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4 text-primary">
+            <i class="fas fa-user me-2"></i> User Details
+        </h1>
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">User Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+            </div>
+        </div>
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Selected Books</h5>
+            </div>
+            <div class="card-body">
+                {% if user.books|length > 0 %}
+                    <ul class="list-group">
+                        {% for book in user.books %}
+                            <li class="list-group-item">
+                                <strong>{{ book.titre }}</strong>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">No books selected.</p>
+                {% endif %}
+            </div>
+        </div>
+        <a href="{{ path('app_user_index') }}" class="btn btn-outline-secondary mt-3">
+            <i class="fas fa-arrow-left me-1"></i> Back to Users
+        </a>
+    </div>
+{% endblock %}

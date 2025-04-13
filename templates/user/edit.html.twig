@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <!-- Page Header -->
+        <div class="page-header py-4 bg-light border-bottom mb-4">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="h3 mb-0 text-primary">
+                            <i class="fas fa-user-edit me-2"></i> Edit User
+                        </h1>
+                        <p class="text-muted mb-0">Update user information below.</p>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <a href="{{ path('app_user_index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to User List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm rounded">
+                    <div class="card-header bg-white border-bottom">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user me-2 text-secondary"></i> User Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+
+                        <div class="mb-3">
+                            <label for="{{ form.username.vars.id }}" class="form-label">
+                                Username <span class="text-danger">*</span>
+                            </label>
+                            {{ form_widget(form.username, {'attr': {'class': 'form-control', 'placeholder': 'Enter a username'}}) }}
+                            {{ form_errors(form.username) }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.email.vars.id }}" class="form-label">
+                                Email <span class="text-danger">*</span>
+                            </label>
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter email address'}}) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+
+                        <!-- Assigned Books Section -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block mb-2">
+                                <i class="fas fa-book text-primary me-2"></i> Assigned Books
+                            </label>
+
+                            <div class="p-3 border rounded bg-light" style="max-height: 250px; overflow-y: auto;">
+                                {% for bookField in form.books %}
+                                    <div class="form-check mb-1">
+                                        {{ form_widget(bookField) }}
+                                        <label class="form-check-label ms-1" for="{{ bookField.vars.id }}">
+                                            {{ bookField.vars.label }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            {% if form_errors(form.books) %}
+                                <div class="text-danger mt-1">
+                                    {{ form_errors(form.books) }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-4">
+                            <a href="{{ path('app_user_index') }}" class="btn btn-outline-secondary me-2">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Save Changes
+                            </button>
+                        </div>
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

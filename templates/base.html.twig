@@ -186,6 +186,18 @@
                             <i class="fas fa-building"></i> Publishers
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.get('_route') starts with 'app_user' %}active{% endif %}" 
+                           href="{{ path('app_user_index') }}">
+                            <i class="fas fa-users"></i> Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.get('_route') starts with 'admin' %}active{% endif %}" 
+                           href="{{ path('admin') }}">
+                            <i class="fas fa-tools"></i> Admin
+                        </a>
+                    </li>
                 </ul>
                 
                 <!-- User Dropdown -->

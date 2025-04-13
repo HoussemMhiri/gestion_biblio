@@ -46,9 +46,16 @@ class Livre
     #[ORM\ManyToMany(targetEntity: Auteur::class, inversedBy: 'livres')]
     private Collection $auteurs;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'books')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->auteurs = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,6 +179,33 @@ class Livre
     public function removeAuteur(Auteur $auteur): static
     {
         $this->auteurs->removeElement($auteur);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeBook($this);
+        }
 
         return $this;
     }
