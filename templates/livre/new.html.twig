@@ -5,16 +5,27 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
+        :root {
+            --primary: #4e73df;
+            --primary-light: #eaefff;
+            --secondary: #858796;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+            --white: #fff;
+        }
+        
         .page-header {
-            background-color: #f8f9fc;
+            background-color: var(--white);
             border-bottom: 1px solid #e3e6f0;
             padding: 1.5rem 0;
             margin-bottom: 2rem;
+            box-shadow: 0 0.15rem 0.5rem rgba(58, 59, 69, 0.05);
         }
         
         .breadcrumb-item + .breadcrumb-item::before {
             content: "›";
             font-weight: bold;
+            color: var(--primary);
         }
         
         .form-container {
@@ -30,21 +41,174 @@
             width: 3rem;
             height: 3rem;
             border-radius: 50%;
-            background-color: rgba(78, 115, 223, 0.5);
+            background-color: var(--primary);
             color: white;
             text-align: center;
             line-height: 3rem;
             transition: all 0.3s;
             z-index: 1000;
+            box-shadow: 0 0.15rem 0.5rem rgba(58, 59, 69, 0.15);
         }
         
         .back-to-top:hover {
-            background-color: rgba(78, 115, 223, 0.8);
+            background-color: #2e59d9;
             color: white;
+            transform: translateY(-3px);
         }
         
         .back-to-top.show {
             display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Enhanced form styling */
+        .form-label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            transition: transform 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-section {
+            border-bottom: 1px solid rgba(0,0,0,.05);
+            padding-bottom: 1.75rem;
+            margin-bottom: 1.75rem;
+        }
+        
+        .card-section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+        
+        .card-section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-light);
+        }
+        
+        .card-section-title i {
+            margin-right: 0.75rem;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .form-select, .form-control {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e3e6f0;
+            transition: all 0.2s;
+        }
+        
+        .form-select:focus, .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+        }
+        
+        .invalid-feedback {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: #2e59d9;
+            border-color: #2e59d9;
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-outline-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-footer {
+            background-color: var(--white);
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding: 1.25rem;
+        }
+        
+        /* Custom styling for select2 */
+        .select2-container--bootstrap-5 .select2-selection {
+            padding: 0.75rem 1rem;
+            height: auto;
+        }
+        
+        /* Input group styling */
+        .input-group-text {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid #e3e6f0;
+            border-radius: 0.5rem 0 0 0.5rem;
+        }
+        
+        .input-group .form-control,
+        .input-group .form-select {
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        /* Add New button styling */
+        .btn-add-new {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 0.15rem 0.5rem rgba(78, 115, 223, 0.3);
+        }
+        
+        .btn-add-new:hover {
+            background-color: #2e59d9;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(78, 115, 223, 0.4);
+        }
+        
+        .btn-add-new i {
+            font-size: 0.9rem;
         }
     </style>
 {% endblock %}
@@ -81,12 +245,142 @@
 
     <!-- Form Container -->
     <div class="container mb-5">
-       
-            {{ include('livre/_form.html.twig', {'button_label': 'Create Book'}) }}
-        </div>
+        {{ form_start(form, {'attr': {'class': 'book-form needs-validation', 'novalidate': 'novalidate'}}) }}
+            <div class="card shadow-sm rounded">
+                <div class="card-body">
+                    <!-- Basic Information Section -->
+                    <div class="card-section">
+                        <h3 class="card-section-title">
+                            <i class="fas fa-info-circle"></i> Basic Information
+                        </h3>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                {{ form_label(form.titre) }}
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"><i class="fas fa-heading"></i></span>
+                                    {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'placeholder': 'Enter book title'}}) }}
+                                </div>
+                                {{ form_errors(form.titre) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_label(form.isbn) }}
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"><i class="fas fa-barcode"></i></span>
+                                    {{ form_widget(form.isbn, {'attr': {'class': 'form-control', 'placeholder': 'e.g. 978-3-16-148410-0'}}) }}
+                                </div>
+                                {{ form_errors(form.isbn) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Publication Details Section -->
+                    <div class="card-section">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="card-section-title">
+                                <i class="fas fa-calendar-alt"></i> Publication Details
+                            </h3>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Publication Date</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                    {{ form_widget(form.dateEdition, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                                {{ form_errors(form.dateEdition) }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Publisher</label>
+                                <div class="d-flex gap-2 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-building"></i></span>
+                                        {{ form_widget(form.editeur, {'attr': {'class': 'form-select'}}) }}
+                                    </div>
+                                    <a href="{{ path('app_editeur_new') }}" class="btn btn-outline-primary">
+                                        <i class="fas fa-plus"></i>
+                                    </a>
+                                </div>
+                                {{ form_errors(form.editeur) }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Category</label>
+                                <div class="d-flex gap-2 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                                        {{ form_widget(form.categorie, {'attr': {'class': 'form-select'}}) }}
+                                    </div>
+                                    <a href="{{ path('app_categorie_new') }}" class="btn btn-outline-primary">
+                                        <i class="fas fa-plus"></i>
+                                    </a>
+                                </div>
+                                {{ form_errors(form.categorie) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book Details Section -->
+                    <div class="card-section">
+                        <h3 class="card-section-title">
+                            <i class="fas fa-book"></i> Book Details
+                        </h3>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                {{ form_label(form.nbPages) }}
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
+                                    {{ form_widget(form.nbPages, {'attr': {'class': 'form-control', 'placeholder': 'e.g. 250'}}) }}
+                                </div>
+                                {{ form_errors(form.nbPages) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form_label(form.nbExemplaires) }}
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"><i class="fas fa-copy"></i></span>
+                                    {{ form_widget(form.nbExemplaires, {'attr': {'class': 'form-control', 'placeholder': 'e.g. 10'}}) }}
+                                </div>
+                                {{ form_errors(form.nbExemplaires) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form_label(form.prix) }}
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"><i class="fas fa-euro-sign"></i></span>
+                                    {{ form_widget(form.prix, {'attr': {'class': 'form-control', 'placeholder': 'e.g. 29.99'}}) }}
+                                </div>
+                                {{ form_errors(form.prix) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Authors Section -->
+                    <div class="card-section">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 class="card-section-title mb-0">
+                                <i class="fas fa-users"></i> Authors
+                            </h3>
+                            <a href="{{ path('app_auteur_new') }}" class="btn-add-new">
+                                <i class="fas fa-plus"></i> Add New Author
+                            </a>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-user-edit"></i></span>
+                            {{ form_widget(form.auteurs, {'attr': {'class': 'form-select select2-widget', 'data-placeholder': 'Select authors'}}) }}
+                        </div>
+                        {{ form_errors(form.auteurs) }}
+                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{{ path('app_livre_index') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-times me-1"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i> Save Book
+                    </button>
+                </div>
+            </div>
+        {{ form_end(form) }}
     </div>
 
-    <!-- Back to top button -->
+     <!-- Back to top button -->
     <a href="#" class="back-to-top text-decoration-none" id="backToTop">
         <i class="fas fa-chevron-up"></i>
     </a>
@@ -132,12 +426,74 @@
                             const yOffset = -100; 
                             const y = invalidField.getBoundingClientRect().top + window.pageYOffset + yOffset;
                             window.scrollTo({top: y, behavior: 'smooth'});
+                            
+                            // Highlight the section containing the error
+                            const section = invalidField.closest('.card-section');
+                            if (section) {
+                                section.classList.add('border-danger');
+                                setTimeout(() => {
+                                    section.classList.remove('border-danger');
+                                }, 3000);
+                            }
                         }
                     }
                     
                     form.classList.add('was-validated');
                 });
             }
+
+            // If you're using Select2 for dropdowns, initialize it here
+            if (typeof $.fn.select2 !== 'undefined') {
+                $('.select2-widget').select2({
+                    theme: 'bootstrap-5',
+                    width: '100%'
+                });
+            }
+            
+            // Add New Author button functionality
+            const addNewAuthorBtn = document.querySelector('.btn-add-new');
+            if (addNewAuthorBtn) {
+                addNewAuthorBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Here you would typically show a modal or navigate to author creation page
+                    // For demonstration, we'll just show an alert
+                    alert('Add New Author functionality would open here');
+                    
+                    // In a real implementation, you might do something like:
+                    // $('#authorModal').modal('show');
+                    // or
+                    // window.location.href = '/authors/new';
+                });
+            }
+            
+            // Add visual feedback when form fields are focused
+            const formControls = document.querySelectorAll('.form-control, .form-select');
+            formControls.forEach(control => {
+                control.addEventListener('focus', function() {
+                    const inputGroup = this.closest('.input-group');
+                    if (inputGroup) {
+                        inputGroup.classList.add('shadow-sm');
+                        const icon = inputGroup.querySelector('.input-group-text');
+                        if (icon) {
+                            icon.style.color = 'var(--primary)';
+                            icon.style.borderColor = 'var(--primary)';
+                        }
+                    }
+                });
+                
+                control.addEventListener('blur', function() {
+                    const inputGroup = this.closest('.input-group');
+                    if (inputGroup) {
+                        inputGroup.classList.remove('shadow-sm');
+                        const icon = inputGroup.querySelector('.input-group-text');
+                        if (icon) {
+                            icon.style.color = '';
+                            icon.style.borderColor = '';
+                        }
+                    }
+                });
+            });
         });
     </script>
 {% endblock %}
+
