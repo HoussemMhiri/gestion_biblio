@@ -30,7 +30,7 @@ class Editeur
     /**
      * @var Collection<int, Livre>
      */
-    #[ORM\OneToMany(targetEntity: Livre::class, mappedBy: 'editeur')]
+    #[ORM\OneToMany(mappedBy: 'editeur', targetEntity: Livre::class)]
     private Collection $livres;
 
     public function __construct()

@@ -36,17 +36,17 @@ class Livre
     private ?string $isbn = null;
 
     #[ORM\ManyToOne(inversedBy: 'livres')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Editeur $editeur = null;
 
     #[ORM\ManyToOne(inversedBy: 'livres')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Categorie $categorie = null;
 
     /**
      * @var Collection<int, Auteur>
      */
-    #[ORM\ManyToMany(targetEntity: Auteur::class, inversedBy: 'livres', cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: Auteur::class, inversedBy: 'livres')]
     #[ORM\JoinTable(name: 'livre_auteur')]
     private Collection $auteurs;
 

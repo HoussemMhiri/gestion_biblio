@@ -192,11 +192,13 @@
                                 <div class="card h-100 book-card">
                                     <div class="card-body">
                                         <h5 class="card-title">{{ livre.titre }}</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">
-                                            {% if livre.categorie is defined %}
-                                                {{ livre.categorie }}
-                                            {% endif %}
-                                        </h6>
+                                      <h6 class="card-subtitle mb-2 text-muted">
+    {% if livre.categorie and livre.categorie.designation %}
+        {{ livre.categorie.designation }}
+    {% else %}
+        Not specified
+    {% endif %}
+</h6>
                                         <p class="card-text">
                                             {% if livre.description is defined %}
                                                 {{ livre.description|striptags|length > 100 ? livre.description|striptags|slice(0, 100) ~ '...' : livre.description|striptags }}

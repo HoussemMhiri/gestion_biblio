@@ -24,7 +24,7 @@ class Categorie
     /**
      * @var Collection<int, Livre>
      */
-    #[ORM\OneToMany(targetEntity: Livre::class, mappedBy: 'categorie')]
+    #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: Livre::class, cascade: [])]
     private Collection $livres;
 
     public function __construct()
