@@ -16,12 +16,15 @@ class Auteur
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[ORM\Display(label: 'First Name')]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
+    #[ORM\Display(label: 'Last Name')]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[ORM\Display(label: 'Biography')]
     private ?string $biographie = null;
 
     #[ORM\ManyToMany(targetEntity: Livre::class, mappedBy: 'auteurs')]
