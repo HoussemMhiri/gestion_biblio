@@ -243,20 +243,7 @@
                         <i class="fas fa-search search-icon"></i>
                         <input type="text" class="form-control" id="userSearch" placeholder="Search users...">
                     </div>
-                    <div class="dropdown filter-dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-filter me-1"></i>
-                            Filter
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-                            <li><a class="dropdown-item" href="#">All Users</a></li>
-                            <li><a class="dropdown-item" href="#">With Books</a></li>
-                            <li><a class="dropdown-item" href="#">Without Books</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Admins</a></li>
-                            <li><a class="dropdown-item" href="#">Regular Users</a></li>
-                        </ul>
-                    </div>
+                    
                 </div>
             </div>
             
@@ -329,12 +316,9 @@
                                             <a href="{{ path('app_user_edit', { id: user.id }) }}" class="btn btn-sm btn-outline-secondary">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ path('app_user_delete', { id: user.id }) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this user?');">
-                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal-{{ user.id }}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -351,32 +335,34 @@
                 {% endif %}
             </div>
             
-            {% if users|length > 0 %}
-                <div class="table-footer">
-                    <div>
-                        <span class="text-muted">Showing {{ users|length }} users</span>
+            <!-- Delete User Modal -->
+            {% for user in users %}
+            <div class="modal fade" id="deleteUserModal-{{ user.id }}" tabindex="-1" aria-labelledby="deleteUserModalLabel-{{ user.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="deleteUserModalLabel-{{ user.id }}">
+                                <i class="fas fa-exclamation-triangle me-2"></i> Confirm Deletion
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete the user <strong>{{ user.username }}</strong>?</p>
+                            <p class="text-danger">This action cannot be undone. All data associated with this user will be permanently removed.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <form method="post" action="{{ path('app_user_delete', { id: user.id }) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash-alt me-1"></i> Delete
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                    <nav aria-label="User pagination">
-                        <ul class="pagination pagination-sm">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                            </li>
-                            <li class="page-item active" aria-current="page">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
                 </div>
-            {% endif %}
+            </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

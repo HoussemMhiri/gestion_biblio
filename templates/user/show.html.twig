@@ -2,40 +2,327 @@
 
 {% block title %}User Details{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        :root {
+            --primary: #4e73df;
+            --primary-light: #eaefff;
+            --secondary: #858796;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+            --white: #fff;
+            --success: #1cc88a;
+        }
+        
+        .user-header {
+            background-color: var(--white);
+            border-bottom: 1px solid #e3e6f0;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 0.15rem 0.5rem rgba(58, 59, 69, 0.05);
+        }
+        
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-right: 1.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            transition: transform 0.2s ease;
+            margin-bottom: 1.5rem;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background-color: var(--white);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-header-icon {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .info-item {
+            display: flex;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .info-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: var(--dark);
+            width: 120px;
+            flex-shrink: 0;
+        }
+        
+        .info-value {
+            color: var(--secondary);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-active {
+            background-color: rgba(28, 200, 138, 0.1);
+            color: var(--success);
+        }
+        
+        .book-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .book-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: background-color 0.2s;
+        }
+        
+        .book-item:last-child {
+            border-bottom: none;
+        }
+        
+        .book-item:hover {
+            background-color: var(--light);
+        }
+        
+        .book-icon {
+            color: var(--primary);
+            margin-right: 1rem;
+            font-size: 1.25rem;
+        }
+        
+        .book-details {
+            flex-grow: 1;
+        }
+        
+        .book-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+        
+        .book-meta {
+            font-size: 0.85rem;
+            color: var(--secondary);
+        }
+        
+        .btn {
+            padding: 0.6rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-outline-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .action-buttons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--secondary);
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #e3e6f0;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-    <div class="container mt-5">
-        <h1 class="mb-4 text-primary">
-            <i class="fas fa-user me-2"></i> User Details
-        </h1>
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-white">
-                <h5 class="mb-0">User Information</h5>
-            </div>
-            <div class="card-body">
-                <p><strong>Username:</strong> {{ user.username }}</p>
-                <p><strong>Email:</strong> {{ user.email }}</p>
-            </div>
-        </div>
-        <div class="card shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="mb-0">Selected Books</h5>
-            </div>
-            <div class="card-body">
-                {% if user.books|length > 0 %}
-                    <ul class="list-group">
-                        {% for book in user.books %}
-                            <li class="list-group-item">
-                                <strong>{{ book.titre }}</strong>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p class="text-muted">No books selected.</p>
-                {% endif %}
+    <!-- User Header -->
+    <div class="user-header">
+        <div class="container">
+            <div class="d-flex align-items-center">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div>
+                    <h1 class="h3 mb-1">{{ user.username }}</h1>
+                    <div class="d-flex align-items-center">
+                        <span class="status-badge status-active me-2">Active</span>
+
+                    </div>
+                </div>
             </div>
         </div>
-        <a href="{{ path('app_user_index') }}" class="btn btn-outline-secondary mt-3">
-            <i class="fas fa-arrow-left me-1"></i> Back to Users
-        </a>
+    </div>
+
+    <div class="container mb-5">
+        <div class="row">
+            <!-- User Information -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h5 class="mb-0">User Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="info-item">
+                            <div class="info-label">Username</div>
+                            <div class="info-value">{{ user.username }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">{{ user.email }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Role</div>
+                            <div class="info-value">
+                                {% if user.roles is defined and 'ROLE_ADMIN' in user.roles %}
+                                    Administrator
+                                {% else %}
+                                    Regular User
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Books</div>
+                            <div class="info-value">{{ user.books|length }}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Information Card (Optional) -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-icon">
+                            <i class="fas fa-address-card"></i>
+                        </div>
+                        <h5 class="mb-0">Contact Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="info-item">
+                            <div class="info-label">Phone</div>
+                            <div class="info-value">{{ user.phone|default('Not provided') }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Address</div>
+                            <div class="info-value">{{ user.address|default('Not provided') }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- User Books -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h5 class="mb-0">Selected Books</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        {% if user.books|length > 0 %}
+                            <ul class="book-list">
+                                {% for book in user.books %}
+                                    <li class="book-item">
+                                        <div class="book-icon">
+                                            <i class="fas fa-book"></i>
+                                        </div>
+                                        <div class="book-details">
+                                            <div class="book-title">{{ book.titre }}</div>
+                                            <div class="book-meta">
+                                                {% if book.auteurs is defined and book.auteurs|length > 0 %}
+                                                    <span>By {{ book.auteurs|map(a => a.nom)|join(', ') }}</span>
+                                                {% endif %}
+                                                {% if book.dateEdition is defined %}
+                                                    <span class="ms-2">Published {{ book.dateEdition|date('Y') }}</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <a href="{{ path('app_livre_show', {'id': book.id}) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <div class="empty-state">
+                                <div class="empty-state-icon">
+                                    <i class="fas fa-books"></i>
+                                </div>
+                                <p>This user hasn't selected any books yet.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Activity History Card (Optional) -->
+              
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="{{ path('app_user_index') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Back to Users
+            </a>
+            <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-outline-primary">
+                <i class="fas fa-edit me-1"></i> Edit User
+            </a>
+        </div>
     </div>
 {% endblock %}
