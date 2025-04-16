@@ -9,7 +9,6 @@
     <div class="container-fluid px-4">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-           
         </div>
 
         <!-- Stats Cards -->
@@ -126,20 +125,59 @@
                         <h6 class="m-0 font-weight-bold text-primary">Statistics</h6>
                     </div>
                     <div class="card-body">
-                        <h4 class="small font-weight-bold">Books by Category <span class="float-end">60%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: 60%" aria-valuenow="60"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <h4 class="small font-weight-bold">Books by Publisher <span class="float-end">40%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-warning" role="progressbar" style="width: 40%" aria-valuenow="40"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <h4 class="small font-weight-bold">Books by Author <span class="float-end">80%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 80%" aria-valuenow="80"
-                                aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="row">
+                            <!-- Books by Category -->
+                            <div class="col-md-4">
+                                <div class="card stats-card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">Books by Category</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        {% for category in booksByCategory %}
+                                            <div class="mb-3">
+                                                <div class="d-flex justify-content-between">
+                                                    <span>{{ category.designation }}</span>
+                                                    <span>{{ category.percentage }}%</span>
+                                                </div>
+                                                <div class="progress">
+                                                    <div class="progress-bar bg-primary" role="progressbar" 
+                                                         style="width: {{ category.percentage }}%" 
+                                                         aria-valuenow="{{ category.percentage }}" 
+                                                         aria-valuemin="0" 
+                                                         aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Books by Publisher -->
+                            <div class="col-md-4">
+                                <div class="card stats-card">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">Books by Publisher</h5>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <p>Total Publishers: <strong>{{ totalPublishers }}</strong></p>
+                                        <p>Percentage of Publishers: <strong>{{ booksWithPublishers }}%</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Books with Authors, Categories, and Publishers -->
+                            <div class="col-md-4">
+                                <div class="card stats-card">
+                                    <div class="card-header bg-warning text-white">
+                                        <h5 class="mb-0">Books Statistics</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>{{ booksWithAuthors }}%</strong> of books have authors.</p>
+                                        <p><strong>{{ booksWithCategories }}%</strong> of books have categories.</p>
+                                        <p><strong>{{ booksWithPublishers }}%</strong> of books have publishers.</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
