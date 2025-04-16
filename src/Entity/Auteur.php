@@ -24,9 +24,6 @@ class Auteur
     #[ORM\Column(length: 255)]
     private ?string $biographie = null;
 
-    /**
-     * @var Collection<int, Livre>
-     */
     #[ORM\ManyToMany(targetEntity: Livre::class, mappedBy: 'auteurs')]
     private Collection $livres;
 
@@ -35,8 +32,9 @@ class Auteur
         $this->livres = new ArrayCollection();
     }
 
-    public function __toString(){
-        return $this->prenom.' '.$this->nom;
+    public function __toString()
+    {
+        return $this->prenom . ' ' . $this->nom;
     }
 
     public function getId(): ?int
@@ -92,7 +90,7 @@ class Auteur
     {
         if (!$this->livres->contains($livre)) {
             $this->livres->add($livre);
-            $livre->addAuteur($this);
+            $livre->addAuteur($this); // Ensure the reciprocal relationship is managed
         }
 
         return $this;
@@ -101,7 +99,7 @@ class Auteur
     public function removeLivre(Livre $livre): static
     {
         if ($this->livres->removeElement($livre)) {
-            $livre->removeAuteur($this);
+            $livre->removeAuteur($this); // Ensure the reciprocal relationship is managed
         }
 
         return $this;

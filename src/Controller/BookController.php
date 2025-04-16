@@ -30,6 +30,17 @@ final class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $categorie = $form->get('categorie')->getData();
+            $editeur = $form->get('editeur')->getData();
+            $auteurs = $form->get('auteurs')->getData();
+
+            $livre->setCategorie($categorie);
+            $livre->setEditeur($editeur);
+
+            foreach ($auteurs as $auteur) {
+                $livre->addAuteur($auteur);
+            }
+
             $entityManager->persist($livre);
             $entityManager->flush();
 
@@ -57,6 +68,22 @@ final class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $categorie = $form->get('categorie')->getData();
+            $editeur = $form->get('editeur')->getData();
+            $auteurs = $form->get('auteurs')->getData();
+
+            $livre->setCategorie($categorie);
+            $livre->setEditeur($editeur);
+
+            // Clear existing authors and add new ones
+            foreach ($livre->getAuteurs()->toArray() as $existingAuteur) {
+                $livre->removeAuteur($existingAuteur);
+            }
+
+            foreach ($auteurs as $auteur) {
+                $livre->addAuteur($auteur);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_livre_index', [], Response::HTTP_SEE_OTHER);
@@ -71,56 +98,11 @@ final class BookController extends AbstractController
     #[Route('/{id}', name: 'app_livre_delete', methods: ['POST'])]
     public function delete(Request $request, Livre $livre, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $livre->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $livre->getId(), $request->request->get('_token'))) {
             $entityManager->remove($livre);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_livre_index', [], Response::HTTP_SEE_OTHER);
-    }
-
-
-    #[Route('/extra/dql-methods', name: 'app_livre_extra_dql_methods', methods: ['GET'])]
-    public function extraDqlMethods(LivreRepository $livreRepository)
-    {
-
-        $findByPrixSup = $livreRepository->findByPrixSup(10);
-        $findByPrixPages = $livreRepository->findByPrixPages(10, 12);
-        $findByPrixPages10 = $livreRepository->findByPrixPages10(10, 12);
-        $findByPrixPagesTrie = $livreRepository->findByPrixPagesTrie(10, 12);
-        $findByPrixPages10Trie = $livreRepository->findByPrixPages10Trie(10, 12);
-        $findByPrixPagesAuteurTrie = $livreRepository->findByPrixPagesAuteurTrie(10, 12);
-
-
-        dd(
-            $findByPrixSup,
-            $findByPrixPages,
-            $findByPrixPages10,
-            $findByPrixPagesTrie,
-            $findByPrixPages10Trie,
-            $findByPrixPagesAuteurTrie
-        );
-    }
-
-    #[Route('/extra/methods', name: 'app_livre_extra_methods', methods: ['GET'])]
-    public function extraMethods(LivreRepository $livreRepository)
-    {
-
-        $findByPrixSup = $livreRepository->findByPrixSup(10);
-        $findByPrixPages = $livreRepository->findByPrixPages(10, 12);
-        $findByPrixPages10 = $livreRepository->findByPrixPages10(10, 12);
-        $findByPrixPagesTrie = $livreRepository->findByPrixPagesTrie(10, 12);
-        $findByPrixPages10Trie = $livreRepository->findByPrixPages10Trie(10, 12);
-        $findByPrixPagesAuteurTrie = $livreRepository->findByPrixPagesAuteurTrie(10, 12);
-
-
-        dd(
-            $findByPrixSup,
-            $findByPrixPages,
-            $findByPrixPages10,
-            $findByPrixPagesTrie,
-            $findByPrixPages10Trie,
-            $findByPrixPagesAuteurTrie
-        );
     }
 }

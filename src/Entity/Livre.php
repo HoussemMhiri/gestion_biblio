@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LivreRepository::class)]
 class Livre
@@ -35,15 +36,18 @@ class Livre
     private ?string $isbn = null;
 
     #[ORM\ManyToOne(inversedBy: 'livres')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Editeur $editeur = null;
 
     #[ORM\ManyToOne(inversedBy: 'livres')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Categorie $categorie = null;
 
     /**
      * @var Collection<int, Auteur>
      */
-    #[ORM\ManyToMany(targetEntity: Auteur::class, inversedBy: 'livres')]
+    #[ORM\ManyToMany(targetEntity: Auteur::class, inversedBy: 'livres', cascade: ['persist'])]
+    #[ORM\JoinTable(name: 'livre_auteur')]
     private Collection $auteurs;
 
     /**
@@ -160,7 +164,7 @@ class Livre
     }
 
     /**
-     * @return Collection<int, auteur>
+     * @return Collection<int, Auteur>
      */
     public function getAuteurs(): Collection
     {
@@ -171,6 +175,7 @@ class Livre
     {
         if (!$this->auteurs->contains($auteur)) {
             $this->auteurs->add($auteur);
+            $auteur->addLivre($this);
         }
 
         return $this;
@@ -178,7 +183,9 @@ class Livre
 
     public function removeAuteur(Auteur $auteur): static
     {
-        $this->auteurs->removeElement($auteur);
+        if ($this->auteurs->removeElement($auteur)) {
+            $auteur->removeLivre($this); // Ensure the reciprocal relationship is managed
+        }
 
         return $this;
     }

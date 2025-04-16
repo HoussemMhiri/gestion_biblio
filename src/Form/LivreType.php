@@ -51,8 +51,6 @@ class LivreType extends AbstractType
                 'attr' => ['class' => 'form-control'],
                 'required' => true,
                 'placeholder' => 'Sélectionnez un éditeur',
-                'help' => '<a href="/editeur/new" class="btn btn-link">Ajouter un nouvel éditeur</a>',
-                'help_html' => true,
             ])
             ->add('categorie', EntityType::class, [
                 'class' => Categorie::class,
@@ -61,8 +59,6 @@ class LivreType extends AbstractType
                 'attr' => ['class' => 'form-control'],
                 'required' => true,
                 'placeholder' => 'Sélectionnez une catégorie',
-                'help' => '<a href="/categorie/new" class="btn btn-link">Ajouter une nouvelle catégorie</a>',
-                'help_html' => true,
             ])
             ->add('auteurs', EntityType::class, [
                 'class' => Auteur::class,
@@ -72,8 +68,6 @@ class LivreType extends AbstractType
                 'label' => 'Auteurs',
                 'attr' => ['class' => 'form-control'],
                 'required' => true,
-                'help' => '<a href="/auteur/new" class="btn btn-link">Ajouter un nouvel auteur</a>',
-                'help_html' => true,
             ]);
     }
 
