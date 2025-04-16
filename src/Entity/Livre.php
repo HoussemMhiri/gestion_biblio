@@ -175,7 +175,10 @@ class Livre
     {
         if (!$this->auteurs->contains($auteur)) {
             $this->auteurs->add($auteur);
-            $auteur->addLivre($this);
+            // Avoid infinite loop
+            if (!$auteur->getLivres()->contains($this)) {
+                $auteur->addLivre($this);
+            }
         }
 
         return $this;
@@ -184,7 +187,10 @@ class Livre
     public function removeAuteur(Auteur $auteur): static
     {
         if ($this->auteurs->removeElement($auteur)) {
-            $auteur->removeLivre($this); // Ensure the reciprocal relationship is managed
+            // Avoid infinite loop
+            if ($auteur->getLivres()->contains($this)) {
+                $auteur->removeLivre($this);
+            }
         }
 
         return $this;

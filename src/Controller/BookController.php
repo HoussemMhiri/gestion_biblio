@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Livre;
 use App\Form\LivreType;
 use App\Repository\LivreRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -75,15 +76,27 @@ final class BookController extends AbstractController
             $livre->setCategorie($categorie);
             $livre->setEditeur($editeur);
 
-            // Clear existing authors and add new ones
-            foreach ($livre->getAuteurs()->toArray() as $existingAuteur) {
-                $livre->removeAuteur($existingAuteur);
+            // Get current authors
+            $currentAuteurs = new ArrayCollection();
+            foreach ($livre->getAuteurs() as $auteur) {
+                $currentAuteurs->add($auteur);
             }
 
+            // Remove authors that were unselected
+            foreach ($currentAuteurs as $auteur) {
+                if (!$auteurs->contains($auteur)) {
+                    $livre->removeAuteur($auteur);
+                }
+            }
+
+            // Add newly selected authors
             foreach ($auteurs as $auteur) {
-                $livre->addAuteur($auteur);
+                if (!$currentAuteurs->contains($auteur)) {
+                    $livre->addAuteur($auteur);
+                }
             }
 
+            $entityManager->persist($livre);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_livre_index', [], Response::HTTP_SEE_OTHER);

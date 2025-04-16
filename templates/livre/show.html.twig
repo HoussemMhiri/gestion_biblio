@@ -202,6 +202,34 @@
                                     <span class="badge-info">{{ livre.prix|number_format(2, '.', ',') }} €</span>
                                 </div>
                             </div>
+                            <div class="detail-row">
+                                <div class="detail-label">
+                                    <i class="fas fa-tags text-primary me-2"></i> Category
+                                </div>
+                                <div class="detail-value">
+                                    {{ livre.categorie.designation }}
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">
+                                    <i class="fas fa-building text-primary me-2"></i> Publisher
+                                </div>
+                                <div class="detail-value">
+                                    {{ livre.editeur.nomEditeur }}
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">
+                                    <i class="fas fa-user text-primary me-2"></i> Authors
+                                </div>
+                                <div class="detail-value">
+                                    {% for auteur in livre.auteurs %}
+                                        <span class="badge badge-info">{{ auteur.nom }} {{ auteur.prenom }}</span>
+                                    {% else %}
+                                        <span>No authors specified</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
